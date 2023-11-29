@@ -20,8 +20,9 @@ namespace TP_ICAP_ConsoleApp
         public void Run(string[] args)
         {
             Console.WriteLine("Welcome, do you want to add a BookOrder? please use the format:  " +
-    " [   { \"OrderId\": \"A1\",    \"Company\": \"A\",    \"OrderType\": \"buy\",   \"Notional\": 2.014, \"Volume\": 150,    \"OrderDateTime\": \"09:27:43\"  },  {    \"OrderId\": \"B1\",    \"Company\": \"B\",    \"OrderType\": \"buy\",    \"Notional\": 23.014,  \"Volume\": 150,    \"OrderDateTime\": \"10:21:43\" } ]");
+    " [   { \"OrderId\": \"A1\",    \"Company\": \"A\",    \"OrderType\": \"Buy\",   \"Notional\": 2.014, \"Volume\": 150,    \"OrderDateTime\": \"09:27:43\"  },  {    \"OrderId\": \"B1\",    \"Company\": \"B\",    \"OrderType\": \"Buy\",    \"Notional\": 23.014,  \"Volume\": 150,    \"OrderDateTime\": \"10:21:43\" } ]");
             string Orders = Console.ReadLine();
+    
             List<BookOrder> BookOrders = JsonConvert.DeserializeObject<List<BookOrder>>(Orders);
 
 
@@ -34,7 +35,7 @@ namespace TP_ICAP_ConsoleApp
             {
                 var matches = _matchAlgorithms.PriceTimePriority(BookOrders);
             }
-
+            Console.ReadLine();
             Console.WriteLine(BookOrders[0]);
         }
     }

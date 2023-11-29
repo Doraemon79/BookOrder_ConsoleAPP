@@ -7,9 +7,9 @@ using TP_ICAP_ConsoleApp.Models;
 
 namespace TP_ICAP_ConsoleApp.Logic
 {
-    internal class My2TupleComparer : IComparer<Tuple<double, TimeSpan>>
+    internal class My2TupleComparer : IComparer<Tuple<double, TimeSpan, string>>
     {
-        public int Compare(Tuple<double, TimeSpan> x, Tuple<double, TimeSpan> y)
+        public int Compare(Tuple<double, TimeSpan,string> x, Tuple<double, TimeSpan, string> y)
         {
             int cc;
             if (x == null && y == null) cc = 0;
@@ -22,6 +22,10 @@ namespace TP_ICAP_ConsoleApp.Logic
                 if (cc == 0)
                 {
                     cc = x.Item2.CompareTo(y.Item2);
+                }
+                if (cc==0)
+                {
+                    cc = x.Item3.CompareTo(y.Item3);
                 }
             }
             return cc;

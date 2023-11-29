@@ -22,7 +22,7 @@ namespace TP_ICAP_ConsoleApp.Models
         public string MatchState { get; set; }
         public TimeSpan OrderDateTime { get; set; }
 
-        public SortedList<string, Match> Matches { get; set; }
+        public List<Match> Matches { get; set; }
 
     }
 }
