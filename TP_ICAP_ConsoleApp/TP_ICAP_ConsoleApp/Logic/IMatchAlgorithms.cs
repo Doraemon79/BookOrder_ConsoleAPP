@@ -11,6 +11,8 @@ namespace TP_ICAP_ConsoleApp.Logic
     {
         Task<List<BookOrder>> PriceTimePriority(List<BookOrder> bookOrders);
 
+        BookOrder MatcherForBuy_v2( BookOrder inputBid);
+
         List<BookOrder> ProRata(List<BookOrder> bookOrders);
     }
 }

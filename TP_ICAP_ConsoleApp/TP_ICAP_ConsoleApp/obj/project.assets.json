@@ -2026,11 +2026,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Repos\\TP_ICAP\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp.csproj",
+      "projectUniqueName": "C:\\Repos\\BookOrder_ConsoleAPP\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp.csproj",
       "projectName": "TP_ICAP_ConsoleApp",
-      "projectPath": "C:\\Repos\\TP_ICAP\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp.csproj",
+      "projectPath": "C:\\Repos\\BookOrder_ConsoleAPP\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp.csproj",
       "packagesPath": "C:\\Users\\ignle\\.nuget\\packages\\",
-      "outputPath": "C:\\Repos\\TP_ICAP\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp\\obj\\",
+      "outputPath": "C:\\Repos\\BookOrder_ConsoleAPP\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

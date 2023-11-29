@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/9t556aYvC+hSgeoZAr0H3+kffQD7OqxoJi9G3kCMbjzag1WYP5PFoBzw2HOKluhOzp9iIo4CFBc4YVRZcv2QQ==",
+  "dgSpecHash": "O3GiusQ63x4PCTLs+rjEbvyHUcendj0SQ3zTmdnlu3oF4UQCCEBTo0s3RnueSeGNI+gg6NyV5NOq3nawtNNW4A==",
   "success": true,
-  "projectFilePath": "C:\\Repos\\TP_ICAP\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp.csproj",
+  "projectFilePath": "C:\\Repos\\BookOrder_ConsoleAPP\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp\\TP_ICAP_ConsoleApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ignle\\.nuget\\packages\\microsoft.extensions.configuration\\8.0.0\\microsoft.extensions.configuration.8.0.0.nupkg.sha512",
     "C:\\Users\\ignle\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",

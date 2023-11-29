@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TP_ICAP_ConsoleApp.Containers;
+using TP_ICAP_ConsoleApp.Controllers;
 using TP_ICAP_ConsoleApp.Logic;
 using TP_ICAP_ConsoleApp.Models;
 
@@ -12,9 +14,12 @@ namespace TP_ICAP_ConsoleApp
     public class App
     {
         private readonly IMatchAlgorithms _matchAlgorithms;
-        public App(IMatchAlgorithms matchAlgorithms)
+        private readonly IOrdersProcessor _orderProcessor;
+
+        public App(IMatchAlgorithms matchAlgorithms, IOrdersProcessor ordersProcessor)
         {
-            _matchAlgorithms=matchAlgorithms;
+            _matchAlgorithms = matchAlgorithms;
+            _orderProcessor = ordersProcessor;
         }
 
         public void Run(string[] args)
@@ -24,7 +29,7 @@ namespace TP_ICAP_ConsoleApp
             string Orders = Console.ReadLine();
     
             List<BookOrder> BookOrders = JsonConvert.DeserializeObject<List<BookOrder>>(Orders);
-
+       
 
 
             Console.WriteLine("Would you like to use Price-Time-Priority or Pro-Rata Alhgorithm?");
@@ -33,7 +38,8 @@ namespace TP_ICAP_ConsoleApp
             string AlgorithmChoice = Console.ReadLine();
             if (AlgorithmChoice.Equals(" Price-Time-Priority") || String.IsNullOrEmpty(AlgorithmChoice))
             {
-                var matches = _matchAlgorithms.PriceTimePriority(BookOrders);
+                _orderProcessor.ProcessBookOrder(BookOrders);
+                //var matches = _matchAlgorithms.PriceTimePriority(BookOrders);
             }
             Console.ReadLine();
             Console.WriteLine(BookOrders[0]);

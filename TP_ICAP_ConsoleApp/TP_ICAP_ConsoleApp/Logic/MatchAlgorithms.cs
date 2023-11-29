@@ -6,19 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using TP_ICAP_ConsoleApp.Containers;
 using TP_ICAP_ConsoleApp.Models;
 
 namespace TP_ICAP_ConsoleApp.Logic
 {
     public class MatchAlgorithms : IMatchAlgorithms
     {
-       private List<BookOrder> BookOrders { get; set; }
+        private List<BookOrder> BookOrders { get; set; }
         private List<KeyValuePair<string, BookOrder>> SellOrders { get; set; }
-        private SortedSet<BookOrder> FullMatchBookOrders { get; set; }
-        private Dictionary<string, BookOrder> FastBookOrdertable = new Dictionary<string, BookOrder>();
-        SortedList<Tuple<double, TimeSpan, string>, string> BookOrdersSortedList = new SortedList<Tuple<double, TimeSpan, string>, string>(new My2TupleComparer());
-        
-         
+        //private Dictionary<string, BookOrder> FastBookOrdertable = new Dictionary<string, BookOrder>();
+
+        private readonly IFastBookOrdered _fastBookOrdered;
+        private readonly ISellOrders _sellOrders;
+
+        public MatchAlgorithms(IFastBookOrdered fastBookOrdered, ISellOrders sellOrders) 
+        {
+            _fastBookOrdered =fastBookOrdered;
+            _sellOrders =sellOrders;
+        }
+
+
+        /*
         public async Task<List<BookOrder>> PriceTimePriority(List<BookOrder> bookOrders)
         {
 
@@ -29,50 +38,69 @@ namespace TP_ICAP_ConsoleApp.Logic
 
             //////////Pric TIme Priority
             //sort list bby date 
+            //Dictionary<string, BookOrder> FastBookOrdertable = new Dictionary<string, BookOrder>();
 
-            List<BookOrder> InvalidOrders = new List<BookOrder>();
-            List<BookOrder> sortedBookOrder= bookOrders.OrderBy(x => x.OrderDateTime).ToList();
+            Dictionary<string, BookOrder> FastBookOrdertable= _fastBookOrdered.BookOrderFiller(bookOrders);
+
+            //List<BookOrder> InvalidOrders = new List<BookOrder>();
+            //List<BookOrder> sortedBookOrder= bookOrders.OrderBy(x => x.OrderDateTime).ToList();
             // make dicrionary FastBookOrdertable
-            foreach(var t in sortedBookOrder)
-            {
-                var isDuplicate = FastBookOrdertable.TryAdd(t.OrderId,t);
-                if(!isDuplicate)
-                {
-                    InvalidOrders.Add(t);
-                }
+            List<BookOrder> InvalidOrders=_fastBookOrdered.InvalidOrdersList();
 
+
+            //foreach (var t in bookOrders)
+            //{
+            //    var isDuplicate = FastBookOrdertable.TryAdd(t.OrderId,t);
+            //    if(!isDuplicate)
+            //    {
+            //        InvalidOrders.Add(t);
+            //    }
+
+            //}
+
+          
+            //make a queue for buy
+            var BuyOrders = FastBookOrdertable.OrderBy(x => x.Value.OrderDateTime).ThenByDescending(x => x.Value.Notional).Where(x => x.Value.OrderType.Equals("Buy")).ToList();
+
+            Queue<BookOrder> BuyQueue = new Queue<BookOrder>();
+                foreach(var t in BuyOrders)
+                    {
+                BuyQueue.Append(t.Value);
             }
 
-            var BuyOrders = FastBookOrdertable.OrderBy(x => x.Value.OrderDateTime).ThenByDescending(x => x.Value.Notional).Where(x => x.Value.OrderType.Equals("Buy")).ToList();
             SellOrders = FastBookOrdertable.OrderBy(x => x.Value.OrderDateTime).ThenByDescending(x => x.Value.Notional).Where(x => x.Value.OrderType.Equals("Sell")).ToList();
 
-            foreach(var el in BuyOrders)
+            Queue<BookOrder> SellQueue = new Queue<BookOrder>();
+            foreach (var t in SellOrders)
             {
-                var bid = MatcherForBuy_v2(el);
+                SellQueue.Append(t.Value);
+            }
+
+            foreach (var el in BuyOrders)
+            {
+                //var bid = MatcherForBuy_v2(el);
                 FastBookOrdertable[bid.OrderId] = bid;
 
             }
 
-            //foreach(var sale in SellOrders)
-            //{
-            //    FastBookOrdertable[sale.Value.OrderId] = sale.Value;
-            //}
+            WriteConsoleOutput(InvalidOrders);
+            WriteConsoleOutput(FastBookOrdertable);
 
-            foreach (var invalid in InvalidOrders)
-            {
-                Console.WriteLine($" {invalid.OrderId} - InvalidMatch a previous order with same Id already existed. ");
-            }
-            foreach (var order in FastBookOrdertable)
-            {
-                Console.WriteLine($" {order.Key} - {order.Value.MatchState}");
-                if (order.Value.Matches != null&&  order.Value.Matches.Count > 0)
-                {
-                    foreach (var m in order.Value.Matches)
-                    {
-                        Console.WriteLine($"          +{m.OrderId}  -  { m.Volume}");
-                    }
-                }
-            }
+            //foreach (var invalid in InvalidOrders)
+            //{
+            //    Console.WriteLine($" {invalid.OrderId} - InvalidMatch a previous order with same Id already existed. ");
+            //}
+            //foreach (var order in FastBookOrdertable)
+            //{
+            //    Console.WriteLine($" {order.Key} - {order.Value.MatchState}");
+            //    if (order.Value.Matches != null&&  order.Value.Matches.Count > 0)
+            //    {
+            //        foreach (var m in order.Value.Matches)
+            //        {
+            //            Console.WriteLine($"          +{m.OrderId}  -  { m.Volume}");
+            //        }
+            //    }
+            //}
 
 
 //////////////////////////////////////////////////////////////////old ///////////////////////////////////////////////////////
@@ -224,20 +252,23 @@ namespace TP_ICAP_ConsoleApp.Logic
             */
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           
-            return BookOrders;
-        }
+        //    return BookOrders;
+        //}
 
-        public BookOrder MatcherForBuy_v2 (KeyValuePair<string,BookOrder> inputBid)
+    
+        public BookOrder ProRataMatcherForBuy(BookOrder inputBid)
         {
+            
+
             BookOrder bid = new BookOrder();
-            bid = inputBid.Value;
+            bid = inputBid;
             if (bid.Matches == null)
             {
                 bid.Matches = new List<Match>();
             }
             if (bid.MatchState != "FullMatch")
             {
-                foreach(var sale in SellOrders)
+                foreach(var sale in _sellOrders.SellsOrderQuickList())
                 {
                     if(bid.Notional>=sale.Value.Notional)
                     {
@@ -249,21 +280,21 @@ namespace TP_ICAP_ConsoleApp.Logic
                         {
                             case int n when n > 0:
                                 bid.Volume -= tempSaleOrder.Volume;
-                                bid.MatchState = "Partialmatch";
+                                bid.MatchState = "PartialMatch";
                                 bid.Matches.Add( new Match { OrderId=tempSaleOrder.OrderId, Notional= tempSaleOrder.Notional, Volume=tempSaleOrder.Volume });
 
                                 
-                                tempSaleOrder.MatchState = "Fullmatch";
+                                tempSaleOrder.MatchState = "FullMatch";
                                 tempSaleOrder.Matches.Add(new Match { OrderId = bid.OrderId, Notional = tempSaleOrder.Notional, Volume = tempSaleOrder.Volume });
                                 tempSaleOrder.Volume = 0;
-                                FastBookOrdertable[tempSaleOrder.OrderId] = tempSaleOrder;
+                                _fastBookOrdered.OrderUpdate(tempSaleOrder); 
                                 break;
 
                             case int n when n < 0:
                                 tempSaleOrder.Volume -= bid.Volume;
-                                tempSaleOrder.MatchState = "Partialmatch";
+                                tempSaleOrder.MatchState = "PartialMatch";
                                 tempSaleOrder.Matches.Add(new Match { OrderId=bid.OrderId, Notional=tempSaleOrder.Notional, Volume=bid.Volume });
-                                FastBookOrdertable[tempSaleOrder.OrderId] = tempSaleOrder;
+                                _fastBookOrdered.OrderUpdate(tempSaleOrder);
 
                                 bid.MatchState = "Fullmatch";
                                 bid.Matches.Add(new Match { OrderId = tempSaleOrder.OrderId, Notional = tempSaleOrder.Notional, Volume = bid.Volume });
@@ -274,7 +305,7 @@ namespace TP_ICAP_ConsoleApp.Logic
                                 tempSaleOrder.MatchState = "FullMatch";
                                 tempSaleOrder.Matches.Add(new Match { OrderId = bid.OrderId, Notional = tempSaleOrder.Notional, Volume = tempSaleOrder.Volume });
                                 tempSaleOrder.Volume = 0;
-                                FastBookOrdertable[tempSaleOrder.OrderId] = tempSaleOrder;
+                                _fastBookOrdered.OrderUpdate(tempSaleOrder);
 
                                 bid.MatchState = "FullMatch";
                                 bid.Matches.Add(new Match { OrderId=tempSaleOrder.OrderId, Notional=tempSaleOrder.Notional, Volume=bid.Volume});
@@ -381,6 +412,11 @@ namespace TP_ICAP_ConsoleApp.Logic
 
 
         public List<BookOrder> ProRata(List<BookOrder> bookOrders)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<BookOrder>> PriceTimePriority(List<BookOrder> bookOrders)
         {
             throw new NotImplementedException();
         }
