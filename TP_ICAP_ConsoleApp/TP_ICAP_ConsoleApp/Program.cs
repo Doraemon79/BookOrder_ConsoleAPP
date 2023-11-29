@@ -25,7 +25,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
     return Host.CreateDefaultBuilder(args)
         .ConfigureServices((_, services) =>
         {
-            services.AddSingleton<IMatchAlgorithms, MatchAlgorithms>();
+            services.AddSingleton<IPriceTimePriorityAlgorithm, PriceTimePriorityAlgorithm>();
+            services.AddSingleton<IProRataAlgorithm, ProRataAlgorithm>();
             services.AddSingleton<IFastBookOrdered, FastBookOrdered>();
             services.AddSingleton<ISellOrders, SellOrders>();
             services.AddSingleton<IOrdersProcessor, OrdersProcessor>();

@@ -9,10 +9,7 @@ namespace TP_ICAP_ConsoleApp.Containers
 {
     public interface ISellOrders
     {
-        //void SellOrdersMaker(List<BookOrder> inputOrders);
         void SellsQuickListMaker(List<KeyValuePair<string, BookOrder>> salesInput);
         List<KeyValuePair<string, BookOrder>> SellsOrderQuickList();
-        //void SellsOrderUpdate(BookOrder sale);
-        //Dictionary<string, BookOrder> OrdersOfSell();
     }
 }

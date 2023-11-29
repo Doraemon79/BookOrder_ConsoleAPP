@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using TP_ICAP_ConsoleApp.Models;
 
-namespace TP_ICAP_ConsoleApp.Controllers
+namespace TP_ICAP_ConsoleApp.Logic
 {
-    public interface IOrdersProcessor
+    public interface IProRataAlgorithm
     {
-       void ProcessBookOrder(List<BookOrder> inputBookOrder, string inputAlgo);
+        BookOrder ProRataMatcherForBuy(BookOrder inputBid, int TotalVolume);
     }
 }

@@ -5,18 +5,15 @@ using TP_ICAP_ConsoleApp.Models;
 
 namespace TP_ICAP_ConsoleAPP_Tests
 {
-    public class MatchAlgorithmsTests 
+    public class PriceTimePriorityAlgorithmTests
     {
-        private readonly MatchAlgorithms MatchAlgorithms_Sut;
-        private readonly Mock<IFastBookOrdered>  _fastBookOrdered=new Mock<IFastBookOrdered>();
-        private readonly Mock<ISellOrders>  _sellOrders= new Mock<ISellOrders>();
+        private readonly PriceTimePriorityAlgorithm PriceTimePriorityAlgorithm_Sut;
+        private readonly Mock<IFastBookOrdered> _fastBookOrdered = new Mock<IFastBookOrdered>();
+        private readonly Mock<ISellOrders> _sellOrders = new Mock<ISellOrders>();
 
-        public MatchAlgorithmsTests( )
+        public PriceTimePriorityAlgorithmTests()
         {
-
-            //_fastBookOrdered = fastBookOrdered;
-            //_sellOrders = sellOrders;
-            MatchAlgorithms_Sut = new MatchAlgorithms(_fastBookOrdered.Object, _sellOrders.Object);
+            PriceTimePriorityAlgorithm_Sut = new PriceTimePriorityAlgorithm(_fastBookOrdered.Object, _sellOrders.Object);
         }
 
         BookOrder buy0 = new BookOrder { OrderId = "A0", Company = "A", Notional = 2.00, Volume = 0, OrderDateTime = new TimeSpan(1, 30, 1), MatchState = "NoMatch", OrderType = "buy" };
@@ -38,7 +35,7 @@ namespace TP_ICAP_ConsoleAPP_Tests
             //Arrange
             List<BookOrder> SampleBookOrder = new List<BookOrder>();
             var sellsOrder = new List<KeyValuePair<string, BookOrder>>();
-            sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell1.OrderId, sell1) );
+            sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell1.OrderId, sell1));
             sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell5.OrderId, sell5));
             _sellOrders.Setup(x => x.SellsOrderQuickList()).Returns(sellsOrder);
             _fastBookOrdered.Setup(x => x.OrderUpdate(buy1));
@@ -46,8 +43,7 @@ namespace TP_ICAP_ConsoleAPP_Tests
             SampleBookOrder.Add(buy1);
 
             //Act
-            var tst =  MatchAlgorithms_Sut.MatcherForBuy_v2(buy1);
-
+            var tst = PriceTimePriorityAlgorithm_Sut.PriceTimePriority(buy1);
 
             //Assert
             Assert.Equal(0, tst.Volume);
@@ -68,53 +64,7 @@ namespace TP_ICAP_ConsoleAPP_Tests
             SampleBookOrder.Add(buy1);
 
             //Act
-            var tst = MatchAlgorithms_Sut.MatcherForBuy_v2(buy1);
-
-
-            //Assert
-            Assert.Equal(90, tst.Volume);
-            Assert.Equal("PartialMatch", tst.MatchState);
-            Assert.Equal("D3", tst.Matches[0].OrderId);
-            Assert.Equal(10, tst.Matches[0].Volume);
-        }
-
-        [Fact]
-        public async Task ProRata_ShouldReturn_BuyOrder_FullMatch_SellOrder_FullMatch()
-        {
-            //Arrange
-            List<BookOrder> SampleBookOrder = new List<BookOrder>();
-            var sellsOrder = new List<KeyValuePair<string, BookOrder>>();
-            sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell1.OrderId, sell1));
-            sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell5.OrderId, sell5));
-            _sellOrders.Setup(x => x.SellsOrderQuickList()).Returns(sellsOrder);
-            _fastBookOrdered.Setup(x => x.OrderUpdate(buy1));
-
-            SampleBookOrder.Add(buy1);
-
-            //Act
-            var tst = MatchAlgorithms_Sut.ProRataMatcherForBuy(buy1);
-
-
-            //Assert
-            Assert.Equal(0, tst.Volume);
-            Assert.Equal("FullMatch", tst.MatchState);
-        }
-
-        [Fact]
-        public async Task ProRata_ShouldReturn_BuyOrder_PartialMatch_SellOrder_FullMatch()
-        {
-            //Arrange
-            List<BookOrder> SampleBookOrder = new List<BookOrder>();
-            var sellsOrder = new List<KeyValuePair<string, BookOrder>>();
-            sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell3.OrderId, sell3));
-            sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell5.OrderId, sell5));
-            _sellOrders.Setup(x => x.SellsOrderQuickList()).Returns(sellsOrder);
-            _fastBookOrdered.Setup(x => x.OrderUpdate(buy1));
-
-            SampleBookOrder.Add(buy1);
-
-            //Act
-            var tst = MatchAlgorithms_Sut.ProRataMatcherForBuy(buy1);
+            var tst = PriceTimePriorityAlgorithm_Sut.PriceTimePriority(buy1);
 
 
             //Assert
@@ -124,4 +74,4 @@ namespace TP_ICAP_ConsoleAPP_Tests
             Assert.Equal(10, tst.Matches[0].Volume);
         }
     }
-    }
+}

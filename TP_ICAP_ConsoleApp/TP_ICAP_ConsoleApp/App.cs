@@ -13,12 +13,12 @@ namespace TP_ICAP_ConsoleApp
 {
     public class App
     {
-        private readonly IMatchAlgorithms _matchAlgorithms;
+        private readonly IPriceTimePriorityAlgorithm _priceTimePriorityAlgorithms;
         private readonly IOrdersProcessor _orderProcessor;
 
-        public App(IMatchAlgorithms matchAlgorithms, IOrdersProcessor ordersProcessor)
+        public App(IPriceTimePriorityAlgorithm matchAlgorithms, IOrdersProcessor ordersProcessor)
         {
-            _matchAlgorithms = matchAlgorithms;
+            _priceTimePriorityAlgorithms = matchAlgorithms;
             _orderProcessor = ordersProcessor;
         }
 
@@ -38,8 +38,12 @@ namespace TP_ICAP_ConsoleApp
             string AlgorithmChoice = Console.ReadLine();
             if (AlgorithmChoice.Equals(" Price-Time-Priority") || String.IsNullOrEmpty(AlgorithmChoice))
             {
-                _orderProcessor.ProcessBookOrder(BookOrders);
+                _orderProcessor.ProcessBookOrder(BookOrders, "");
                 //var matches = _matchAlgorithms.PriceTimePriority(BookOrders);
+            }
+            else
+            {
+                _orderProcessor.ProcessBookOrder(BookOrders, "Pro-Rata");
             }
             Console.ReadLine();
             Console.WriteLine(BookOrders[0]);

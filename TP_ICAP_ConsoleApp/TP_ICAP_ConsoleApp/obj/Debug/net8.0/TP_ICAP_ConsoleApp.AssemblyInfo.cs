@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TP_ICAP_ConsoleApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+158216789790a5ebcecb269e05084c76331e0f1d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5088365e092840c0322fbb76dabbafa2c2b74136")]
 [assembly: System.Reflection.AssemblyProductAttribute("TP_ICAP_ConsoleApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TP_ICAP_ConsoleApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
