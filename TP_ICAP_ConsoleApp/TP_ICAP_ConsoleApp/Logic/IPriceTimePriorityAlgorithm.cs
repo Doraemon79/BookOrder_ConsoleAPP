@@ -4,6 +4,6 @@ namespace TP_ICAP_ConsoleApp.Logic
 {
     public interface IPriceTimePriorityAlgorithm
     {
-        BookOrder PriceTimePriority( BookOrder inputBid);
+        BookOrder PriceTimePriority(BookOrder inputBid);
     }
 }

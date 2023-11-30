@@ -20,7 +20,7 @@ namespace TP_ICAP_ConsoleApp.Logic
             {
                 bid.Matches = new List<Match>();
             }
-  
+
             foreach (var sale in _sellOrders.SellsOrderQuickList())
             {
                 BookOrder tempSaleOrder = sale.Value;
@@ -57,7 +57,7 @@ namespace TP_ICAP_ConsoleApp.Logic
 
                 }
             }
-                return bid;
+            return bid;
         }
     }
 }

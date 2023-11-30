@@ -8,10 +8,10 @@ namespace TP_ICAP_ConsoleAPP_Tests
     public class ProRataPriorityAlgorithmTests
     {
         private readonly ProRataAlgorithm ProRataAlgorithm_Sut;
-        private readonly Mock<IFastBookOrdered>  _fastBookOrdered=new Mock<IFastBookOrdered>();
-        private readonly Mock<ISellOrders>  _sellOrders= new Mock<ISellOrders>();
+        private readonly Mock<IFastBookOrdered> _fastBookOrdered = new Mock<IFastBookOrdered>();
+        private readonly Mock<ISellOrders> _sellOrders = new Mock<ISellOrders>();
 
-        public ProRataPriorityAlgorithmTests( )
+        public ProRataPriorityAlgorithmTests()
         {
 
             //_fastBookOrdered = fastBookOrdered;
@@ -33,7 +33,7 @@ namespace TP_ICAP_ConsoleAPP_Tests
 
 
         [Fact]
-        public async Task ProRata_ShouldReturn_BuyOrder_FullMatch_SellOrder_FullMatch()
+        public void  ProRata_ShouldReturn_BuyOrder_FullMatch_SellOrder_FullMatch()
         {
             //Arrange
             List<BookOrder> SampleBookOrder = new List<BookOrder>();
@@ -45,7 +45,7 @@ namespace TP_ICAP_ConsoleAPP_Tests
             SampleBookOrder.Add(buy1);
 
             //Act
-            var tst = ProRataAlgorithm_Sut.ProRataMatcherForBuy(buy1,250);
+            var tst = ProRataAlgorithm_Sut.ProRataMatcherForBuy(buy1, 250);
 
 
             //Assert
@@ -54,7 +54,7 @@ namespace TP_ICAP_ConsoleAPP_Tests
         }
 
         [Fact]
-        public async Task ProRata_ShouldReturn_BuyOrder_PartialMatch_SellOrder_FullMatch()
+        public void ProRata_ShouldReturn_BuyOrder_PartialMatch_SellOrder_FullMatch()
         {
             //Arrange
             List<BookOrder> SampleBookOrder = new List<BookOrder>();
@@ -77,4 +77,4 @@ namespace TP_ICAP_ConsoleAPP_Tests
             Assert.Equal(5, tst.Matches[0].Volume);
         }
     }
-    }
+}

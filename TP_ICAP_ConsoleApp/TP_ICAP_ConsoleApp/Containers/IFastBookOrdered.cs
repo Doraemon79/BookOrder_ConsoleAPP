@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TP_ICAP_ConsoleApp.Models;
+﻿using TP_ICAP_ConsoleApp.Models;
 
 namespace TP_ICAP_ConsoleApp.Containers
 {
@@ -13,7 +8,7 @@ namespace TP_ICAP_ConsoleApp.Containers
 
         void FastBookOrderCreator();
         List<BookOrder> InvalidOrdersList();
-        void BookOrderFiller(List<BookOrder> bookOrders);
+        void BookOrderFiller(List<BookOrder> bookOrders, Dictionary<string, BookOrder> FastBookOrderedTable, List<BookOrder> InvalidOrders);
 
         void OrderUpdate(BookOrder order);
 
