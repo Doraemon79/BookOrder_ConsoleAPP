@@ -13,7 +13,7 @@ namespace TP_ICAP_ConsoleAPP_Tests
 
         public ProRataPriorityAlgorithmTests()
         {
-
+            //FastBookOrdered_Sut = new FastBookOrdered();
             //_fastBookOrdered = fastBookOrdered;
             //_sellOrders = sellOrders;
             ProRataAlgorithm_Sut = new ProRataAlgorithm(_fastBookOrdered.Object, _sellOrders.Object);
@@ -33,7 +33,7 @@ namespace TP_ICAP_ConsoleAPP_Tests
 
 
         [Fact]
-        public void  ProRata_ShouldReturn_BuyOrder_FullMatch_SellOrder_FullMatch()
+        public void ProRata_ShouldReturn_BuyOrder_FullMatch_SellOrder_FullMatch()
         {
             //Arrange
             List<BookOrder> SampleBookOrder = new List<BookOrder>();
@@ -42,10 +42,11 @@ namespace TP_ICAP_ConsoleAPP_Tests
             _sellOrders.Setup(x => x.SellsOrderQuickList()).Returns(sellsOrder);
             _fastBookOrdered.Setup(x => x.OrderUpdate(buy1));
 
+
             SampleBookOrder.Add(buy1);
 
             //Act
-            var tst = ProRataAlgorithm_Sut.ProRataMatcherForBuy(buy1, 250);
+            var tst = ProRataAlgorithm_Sut.ProRataMatcherForBuy(buy1, 250, 200);
 
 
             //Assert
@@ -59,22 +60,31 @@ namespace TP_ICAP_ConsoleAPP_Tests
             //Arrange
             List<BookOrder> SampleBookOrder = new List<BookOrder>();
             var sellsOrder = new List<KeyValuePair<string, BookOrder>>();
+            var bookOrders = new Dictionary<string, BookOrder>();
+            bookOrders.Add(sell3.OrderId, sell3);
+            bookOrders.Add(sell5.OrderId, sell5);
             sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell3.OrderId, sell3));
             sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell5.OrderId, sell5));
             _sellOrders.Setup(x => x.SellsOrderQuickList()).Returns(sellsOrder);
             _fastBookOrdered.Setup(x => x.OrderUpdate(buy1));
+            _fastBookOrdered.Setup(x => x.BookOrder()).Returns(bookOrders);
+            _fastBookOrdered.Setup(x => x.GetOrder(sell3.OrderId)).Returns(sell3);
+            _fastBookOrdered.Setup(x => x.GetOrder(sell5.OrderId)).Returns(sell5);
 
             SampleBookOrder.Add(buy1);
+            SampleBookOrder.Add(buy2);
 
             //Act
-            var tst = ProRataAlgorithm_Sut.ProRataMatcherForBuy(buy1, 100);
+
+
+            var tst = ProRataAlgorithm_Sut.ProRataMatcherForBuy(buy1, 250, 160);
 
 
             //Assert
-            Assert.Equal(45, tst.Volume);
+            Assert.Equal(18, tst.Volume);
             Assert.Equal("PartialMatch", tst.MatchState);
             Assert.Equal("D3", tst.Matches[0].OrderId);
-            Assert.Equal(5, tst.Matches[0].Volume);
+            Assert.Equal(2, tst.Matches[0].Volume);
         }
     }
 }

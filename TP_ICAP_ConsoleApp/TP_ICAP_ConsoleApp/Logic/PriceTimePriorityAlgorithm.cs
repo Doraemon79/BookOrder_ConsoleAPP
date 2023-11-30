@@ -16,19 +16,18 @@ namespace TP_ICAP_ConsoleApp.Logic
 
         public BookOrder PriceTimePriority(BookOrder inputBid)
         {
-            BookOrder bid = new BookOrder();
-            bid = inputBid;
-            //if (bid.Matches == null)
-            //{
-            //    bid.Matches = new List<Match>();
-            //}
+            _ = new BookOrder();
+            BookOrder bid = inputBid;
+
             if (bid.MatchState != "FullMatch")
             {
-                foreach (var sale in _sellOrders.SellsOrderQuickList())
+                foreach (var s in _sellOrders.SellsOrderQuickList())
                 {
-                    if (bid.Notional >= sale.Value.Notional)
+                    var sale = _fastBookOrdered.GetOrder(s.Value.OrderId);
+
+                    if (bid.Notional >= sale.Notional)
                     {
-                        var tempSaleOrder = sale.Value;
+                        var tempSaleOrder = sale;
                         tempSaleOrder.Matches = new List<Match>();
 
                         int FinalVolume = bid.Volume - tempSaleOrder.Volume;
@@ -66,8 +65,6 @@ namespace TP_ICAP_ConsoleApp.Logic
                                 bid.Matches.Add(new Match { OrderId = tempSaleOrder.OrderId, Notional = tempSaleOrder.Notional, Volume = bid.Volume });
                                 bid.Volume = 0;
                                 break;
-
-
                         }
 
                     }

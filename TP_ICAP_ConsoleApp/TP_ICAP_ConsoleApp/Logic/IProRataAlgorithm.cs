@@ -4,6 +4,6 @@ namespace TP_ICAP_ConsoleApp.Logic
 {
     public interface IProRataAlgorithm
     {
-        BookOrder ProRataMatcherForBuy(BookOrder inputBid, int TotalVolume);
+        BookOrder ProRataMatcherForBuy(BookOrder inputBid, int TotalVolume, int totalSaleVolume);
     }
 }

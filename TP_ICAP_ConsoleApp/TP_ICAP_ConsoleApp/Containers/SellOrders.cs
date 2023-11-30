@@ -4,10 +4,8 @@ namespace TP_ICAP_ConsoleApp.Containers
 {
     public class SellOrders : ISellOrders
     {
-        public List<BookOrder> SellOrdersList { get; set; }
-        public List<KeyValuePair<string, BookOrder>> SellsQuickList { get; set; }
+        public List<KeyValuePair<string, BookOrder>>? SellsQuickList { get; set; }
 
-        public SellOrders() { }
         public void SellsQuickListMaker(List<KeyValuePair<string, BookOrder>> salesInput)
         {
             SellsQuickList = salesInput;

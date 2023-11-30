@@ -27,13 +27,13 @@ namespace TP_ICAP_ConsoleApp
 
 
             string? AlgorithmChoice = Console.ReadLine();
-            List<BookOrder> BookOrders=new List<BookOrder>();
-            if (Orders !=null)
-            {  BookOrders = JsonConvert.DeserializeObject<List<BookOrder>>(Orders); }
-            
-            if (AlgorithmChoice.Equals(" Price-Time-Priority") || String.IsNullOrEmpty(AlgorithmChoice))
+            List<BookOrder> BookOrders = new();
+            if (Orders != null)
+            { BookOrders = JsonConvert.DeserializeObject<List<BookOrder>>(Orders); }
+
+            if (AlgorithmChoice.Equals("Price-Time-Priority") || String.IsNullOrEmpty(AlgorithmChoice))
             {
-                _orderProcessor.ProcessBookOrder(BookOrders, "");
+                _orderProcessor.ProcessBookOrder(BookOrders, "Price-Time-Priority");
             }
             else
             {

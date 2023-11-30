@@ -43,7 +43,8 @@ namespace TP_ICAP_ConsoleAPP_Tests
             sellsOrder.Add(new KeyValuePair<string, BookOrder>(sell5.OrderId, sell5));
             _sellOrders.Setup(x => x.SellsOrderQuickList()).Returns(sellsOrder);
             _fastBookOrdered.Setup(x => x.OrderUpdate(buy1));
-
+            _fastBookOrdered.Setup(x => x.GetOrder(sell1.OrderId)).Returns(sell1);
+            _fastBookOrdered.Setup(x => x.GetOrder(sell5.OrderId)).Returns(sell5);
             SampleBookOrder.Add(buy1);
 
             //Act
@@ -72,6 +73,8 @@ namespace TP_ICAP_ConsoleAPP_Tests
             //orders.Add(sell3.OrderId, sell3);
             //orders.Add(sell5.OrderId, sell5);
             _sellOrders.Setup(x => x.SellsOrderQuickList()).Returns(sellsOrder);
+            _fastBookOrdered.Setup(x => x.GetOrder(sell3.OrderId)).Returns(sell3);
+            _fastBookOrdered.Setup(x => x.GetOrder(sell5.OrderId)).Returns(sell5);
             //var tst2 = _fastBookOrdered.Setup(x => x.BookOrder()).Returns(orders);
             _fastBookOrdered.Setup(x => x.OrderUpdate(buy1));
 
@@ -79,7 +82,7 @@ namespace TP_ICAP_ConsoleAPP_Tests
 
             //Act
             var tst = PriceTimePriorityAlgorithm_Sut.PriceTimePriority(buy1);
-           
+
 
             //Assert
             Assert.Equal(90, tst.Volume);

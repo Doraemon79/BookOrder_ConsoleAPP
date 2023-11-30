@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using TP_ICAP_ConsoleApp;
 using TP_ICAP_ConsoleApp.Containers;
 using TP_ICAP_ConsoleApp.Controllers;
+using TP_ICAP_ConsoleApp.Helpers;
 using TP_ICAP_ConsoleApp.Logic;
 
 using IHost host = CreateHostBuilder(args).Build();
@@ -30,6 +31,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddSingleton<IFastBookOrdered, FastBookOrdered>();
             services.AddSingleton<ISellOrders, SellOrders>();
             services.AddSingleton<IOrdersProcessor, OrdersProcessor>();
+            services.AddSingleton<IWriteOutput, WriteOutput>();
+
             services.AddSingleton<App>();
         });
 }

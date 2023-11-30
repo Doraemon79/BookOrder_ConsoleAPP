@@ -14,6 +14,8 @@ namespace TP_ICAP_ConsoleApp.Containers
 
         void InvalidOrderListCreator();
 
+        void OrderToBookProcessor(List<BookOrder> bookOrders, Dictionary<string, BookOrder> FastBookOrderedTable, List<BookOrder> InvalidOrders);
+        BookOrder GetOrder(string orderId);
 
     }
 }
